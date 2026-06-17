@@ -1,0 +1,22 @@
+{
+    "cora": {
+        "feat_dim": 1433,
+        "hidden_dim": 128,
+        "num_layers": 3,
+        "lr": 0.003,
+        "dropout": 0.5,
+        "n_classes": 7,
+        "activation": "relu",
+        "n_heads": 4
+    },
+    "ogbn-arxiv": {
+        "feat_dim": 128,
+        "hidden_dim": 128,
+        "num_layers": 3,
+        "lr": 0.003,
+        "dropout": 0.5,
+        "n_classes": 40,
+        "activation": "relu",
+        "n_heads": 4
+    }
+}
