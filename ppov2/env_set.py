@@ -407,27 +407,3 @@ class LoadBalanceEnv:
             self.env_buffer[-1]
         )
         self.buffer.compute_rets(next_value)
-
-    @torch.no_grad()
-    def update_action(self, action, step):
-        if len(action[0]) == 0:
-            print("No migration action")
-            return action
-        sub_graph = self.buffer.graph_list[step]
-        node_dict = self.buffer.node_dict_list[step]
-        local_rank = self.buffer.max_index_list[step]
-        num_parts = self.num_parts
-
-        migration_counts = torch.bincount(action[1], minlength=self.num_parts)
-        print("Migrated nodes count per partition:", migration_counts.tolist())
-
-        node_dict["part_id"][action[0]] = action[1]
-        node_dict["inner_node"][action[0]] = 0
-
-        up_action = self.get_v_group(sub_graph, node_dict, local_rank, num_parts)
-        for part in range(num_parts):
-            mask = (action[1] == part)
-            nodes_in_part = action[0][mask]
-            up_action[part] = torch.cat([up_action[part], nodes_in_part])
-
-        return up_action
